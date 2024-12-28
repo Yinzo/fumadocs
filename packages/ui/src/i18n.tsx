@@ -45,12 +45,17 @@ export function I18nProvider({
 
   const onChangeCallback = (locale: string) => {
     const segments = pathname.split('/').filter((v) => v.length > 0);
+    const availableLocales = locales.map((l) => l.locale);
+    
+    // Check if first segment is a valid locale
+    const isFirstSegmentLocale = segments.length > 0 && availableLocales.some(l => 
+      l === segments[0]
+    );
 
-    // If locale prefix hidden
-    if (segments[0] !== locale) {
-      segments.unshift(locale);
-    } else {
+    if (isFirstSegmentLocale) {
       segments[0] = locale;
+    } else {
+      segments.unshift(locale);
     }
 
     router.push(`/${segments.join('/')}`);
